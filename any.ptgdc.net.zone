@@ -1,0 +1,17 @@
+$ORIGIN .
+$TTL 300  ; 6 minute
+ptgdc.net IN SOA  ns1.ptgdc.net. master.ptgdc.net. (
+                                1311231540 ; serial
+                                360        ; refresh (6 minute)
+                                3600       ; retry (1 hour)
+                                604800     ; expire (1 week)
+                                38400      ; minimum (10 hours 40 minutes)
+                                )
+                           NS   ns1.ptgdc.net.
+                           NS   ns2.ptgdc.net.
+$ORIGIN ptgdc.net.
+@                          A    58.22.138.28
+www                        A    218.6.8.84
+@                          MX 10  mail.ptgdc.net.
+ns1                        A    58.22.138.4
+ns2                        A    58.22.138.30
