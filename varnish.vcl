@@ -1,40 +1,33 @@
-backend img {
+backend demo {
     .host = "127.0.0.1";
     .port = "8090";
 }
-
 acl purge {
     "localhost";
     "127.0.0.1";
 }
 
 sub vcl_recv {
-
     remove req.http.X-Forwarded-For;
     set req.http.X-Forwarded-For = client.ip;
-
     if (req.request == "PURGE") {
         if (!client.ip ~ purge) {
             error 405 "not allowed.";
         }
         return(lookup);
     }
-
-    if (req.http.host ~ "^img.ptfish.com") {
-        set req.backend = img;
+    if (req.http.host ~ "^demo.com") {
+        set req.backend = demo;
     }
     else {
         error 404 "Unknown HostName!";
     }
-
     if (req.request != "GET" && req.request != "HEAD") {
         return (pass);
     }
-
     if (req.http.Authorization || req.http.Cookie) {
         return (pass);
      }
-
     if (req.url ~ "\.(aspx|asp|php|cgi|jsp)($|\?)") {
         return(pass);
     }
@@ -44,7 +37,7 @@ sub vcl_recv {
 }
 
 sub vcl_fetch {
-    if (req.request == "GET" && req.url ~ ".(css|mp3|jpg|png|gif|swf|flv|jpeg|ic                                                                                              o)$") {
+    if (req.request == "GET" && req.url ~ ".(css|mp3|jpg|png|gif|swf|flv|jpeg|ico)$") {
         set beresp.ttl = 10d;
     }
     return (deliver);
@@ -84,6 +77,6 @@ sub vcl_error {
                 <p>Fish Cache Server</p>
             </body>
         </html>
-"};
-     return (deliver);
+    "};
+    return (deliver);
 }
